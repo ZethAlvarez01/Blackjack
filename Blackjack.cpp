@@ -151,7 +151,7 @@ int main(){
 
     
     while(aux2->siguiente!=NULL){
-        printf("%s tienes para apostar: %d creditos\n",aux2->nombre,aux2->apuesta);
+        printf("\n%s tienes para apostar: %d creditos\n",aux2->nombre,aux2->apuesta);
         int flg=1;
         do{
                 
@@ -159,7 +159,7 @@ int main(){
                 int apu_actual=0;
                 scanf("%d",&apu_actual);
                 if(apu_actual > aux2->apuesta){
-                    printf("No puedes apostar mas de lo que tienes.\n");
+                    printf("\nNo puedes apostar mas de lo que tienes.\n");
                     flg=1;
                 }else{
                     flg=0;
@@ -179,29 +179,29 @@ int main(){
     system("cls");
     titulo();
     printf("\nReparticion de cartas\n");
-    printf("Las cartas se repartieron asi de la siguete forma.\n");
-    mostrarPila(Pila);   
+    printf("Las cartas se repartieron asi de la siguete forma.\n\n");
+    //mostrarPila(Pila);   
 
     Lista* aux5=orden_turnos;
     ListaCartas* mano;
     while(aux5->siguiente!=NULL){
-        printf("%s\n",aux5->nombre);
+        //printf("%s\n",aux5->nombre);
         mano=NULL;
         struct Pila* carta=pop(&Pila);
-        printf("%d%c\n",carta->carta->valor,carta->carta->palo);
+        //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
         aux5->lista_de_cartas[0]=carta->carta;
         carta=pop(&Pila);
-        printf("%d%c\n",carta->carta->valor,carta->carta->palo);
+        //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
         aux5->lista_de_cartas[1]=carta->carta;
         aux5=aux5->siguiente;
     }
-    printf("%s\n",aux5->nombre);
+    //printf("%s\n",aux5->nombre);
     mano = NULL;
     struct Pila* carta=pop(&Pila);
-    printf("%d%c\n",carta->carta->valor,carta->carta->palo);
+    //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
     aux5->lista_de_cartas[0]=carta->carta;
     carta=pop(&Pila);
-    printf("%d%c\n",carta->carta->valor,carta->carta->palo);
+    //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
     aux5->lista_de_cartas[1]=carta->carta;
 
     Lista* aux6=orden_turnos;
@@ -210,14 +210,14 @@ int main(){
          Carta* mano=aux6->lista_de_cartas[0];
          printf("%d%c ",mano->valor,mano->palo);
          mano=aux6->lista_de_cartas[1];
-         printf("%d%c \n",mano->valor,mano->palo);
+         printf("%d%c \n\n",mano->valor,mano->palo);
          aux6=aux6->siguiente;
      }
      printf("La mano del %s es: \n",aux6->nombre);
      Carta* mano2=aux6->lista_de_cartas[0];
      printf("%d%c ",mano2->valor,mano2->palo);
      mano2=aux6->lista_de_cartas[1];
-     printf("%d%c \n",mano2->valor,mano2->palo);
+     printf("%d%c \n\n",mano2->valor,mano2->palo);
 
 
     //mostrarPila(Pila);  
