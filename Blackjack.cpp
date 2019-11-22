@@ -48,6 +48,7 @@ Carta* CrearPila(Carta *ArregloPila[]);
 Carta* Pilar(Carta *ArregloPila[]);
 void Crear_Pilar_Y_Anadir(struct Pila **Pila);
 
+
 int tamano(struct Lista *lista){                                     // Paso por valor
                                                                         // Apuntador auxiliar que comienza donde inicia la lista (No es necesario XD trabaja con lista)
     int pos=0;
@@ -164,6 +165,7 @@ int main(){
                 }else{
                     flg=0;
                     apuestas[pos]=apu_actual;
+                    aux2->apuesta=aux2->apuesta-apu_actual;
                     pos++;
                 }
         }while(flg!=0);
@@ -185,23 +187,17 @@ int main(){
     Lista* aux5=orden_turnos;
     ListaCartas* mano;
     while(aux5->siguiente!=NULL){
-        //printf("%s\n",aux5->nombre);
         mano=NULL;
         struct Pila* carta=pop(&Pila);
-        //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
         aux5->lista_de_cartas[0]=carta->carta;
         carta=pop(&Pila);
-        //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
         aux5->lista_de_cartas[1]=carta->carta;
         aux5=aux5->siguiente;
     }
-    //printf("%s\n",aux5->nombre);
     mano = NULL;
-    struct Pila* carta=pop(&Pila);
-    //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
+    struct Pila* carta=pop(&Pila);                      // Saco una carta del mazo y la guarda en un arreglo (siempre son 2 cartas por jugador)
     aux5->lista_de_cartas[0]=carta->carta;
     carta=pop(&Pila);
-    //printf("%d%c\n",carta->carta->valor,carta->carta->palo);
     aux5->lista_de_cartas[1]=carta->carta;
 
     Lista* aux6=orden_turnos;
@@ -218,26 +214,197 @@ int main(){
      printf("%d%c ",mano2->valor,mano2->palo);
      mano2=aux6->lista_de_cartas[1];
      printf("%d%c \n\n",mano2->valor,mano2->palo);
+     char contin;
+     printf("Presiona una tecla...\n");
+     fflush(stdin);
+     scanf("%c",&contin);
 
+     Lista* aux7=orden_turnos;
+     int jug_act=0;
+     int cartas_mano=2;
+     int opcion=0;
+     int parar = 1;
+     int suma=0;
 
-    //mostrarPila(Pila);  
+     while(aux7->siguiente!=NULL){
 
+        system("cls");
+        titulo();
+        printf("\nComienza el juego\n\n ");
 
-    
+         printf("Es turno de %s\n",aux7->nombre);
+         printf(" Mano actual\n");
+         for(int i=0;i<cartas_mano;i++){
+             printf(" %d%c",aux7->lista_de_cartas[i]->valor,aux7->lista_de_cartas[i]->palo);
+         }
+         printf("\n\n Que quieres hacer?\n\n 1 Doblar apuesta\n 2 Pedir carta\n 3 Plantarse\n\n Opcion: ");
+         opcion=0;
+         parar=1;
+         fflush(stdin);
+         scanf("%d",&opcion);
+         
+         switch (opcion){
+            case 1:
+                    system("cls");
+                    titulo();
+                    printf("\nComienza el juego %s\n\n ",aux7->nombre);
 
+                if(apuestas[jug_act]>aux7->apuesta){
+                    printf("\nNo tienes creditos suficientes\n\n Creditos actuales: %d",aux7->apuesta);
+                }else{
+                    printf("\nHas doblado tu apuesta inicial, solo recibiras una carta mas.\n");
+                    aux7->apuesta=aux7->apuesta-apuestas[jug_act];
+                    apuestas[jug_act]=apuestas[jug_act]+apuestas[jug_act];
+                    printf(" Creditos restantes: %d\n Nueva apuesta: %d\n\n",aux7->apuesta,apuestas[jug_act]);
+                    struct Pila* carta=pop(&Pila);  
+                    aux7->lista_de_cartas[cartas_mano]=carta->carta;
+                    cartas_mano++; 
+                    printf("Tu nueva mano es: \n",aux7->nombre);
+                    suma=0;
+                    for(int i=0;i<cartas_mano;i++){
+                        int valor=aux7->lista_de_cartas[i]->valor;
+                        if(valor>=10){
+                            valor=10;
+                        }
+                        suma=suma+valor;
+                        printf(" %d%c",aux7->lista_de_cartas[i]->valor,aux7->lista_de_cartas[i]->palo);
+                    }
+                    if(suma>21){
+                        aux7->estado=1;
+                        printf("\n\n  Game Over!  ");
+                    }
+                        printf("\n\nPresiona una tecla...\n");
+                        fflush(stdin);
+                        scanf("%c",&contin);
+                    
 
-    
+                    
+                    jug_act++;
+                    cartas_mano=2;
+                    suma=0;
+
+                }
+                break;
+            case 2:
+                system("cls");
+                titulo();
+                printf("\nComienza el juego %s\n\n ",aux7->nombre);
+                
+                printf("Pide las cartas que quieras\n");
+                while(parar!=0){
+                    struct Pila* carta=pop(&Pila);  
+                    aux7->lista_de_cartas[cartas_mano]=carta->carta;
+                    cartas_mano++; 
+                    printf("Tu nueva mano es: \n",aux7->nombre);
+                    suma=0;
+                    for(int i=0;i<cartas_mano;i++){
+                        int valor=aux7->lista_de_cartas[i]->valor;
+                        if(valor>=10){
+                            valor=10;
+                        }
+                        suma=suma+valor;
+                        printf(" %d%c",aux7->lista_de_cartas[i]->valor,aux7->lista_de_cartas[i]->palo);
+                    }
+
+                    if(suma>21){
+                        aux7->estado=1;
+                        printf("\n\n  Game Over!  ");
+                        parar=0;
+                    }else{
+                        printf("\n\nPedir otra? [1/Si] [0/Plantarse]\n");
+                        fflush(stdin);
+                        scanf("%d",&parar);
+                    }
+                }
+
+                printf("\n\nPresiona una tecla...\n");
+                fflush(stdin);
+                scanf("%c",&contin);
+                jug_act++;
+                cartas_mano=2;
+                parar=1;
+                suma=0;
+                break;
+            case 3:
+                system("cls");
+                titulo();
+                printf("\nTe has plantado %s\n\n ",aux7->nombre);
+                    printf(" Tu mano es\n");
+                    suma=0;
+                    for(int i=0;i<cartas_mano;i++){
+                        int valor=aux7->lista_de_cartas[i]->valor;
+                        if(valor>=10){
+                            valor=10;
+                        }
+                        suma=suma+valor;
+                        printf(" %d%c",aux7->lista_de_cartas[i]->valor,aux7->lista_de_cartas[i]->palo);
+                    }
+
+                    if(suma>21){
+                        aux7->estado=1;
+                        printf("\n\n  Game Over!  ");
+                    }
+                        printf("\n\nPresiona una tecla...\n");
+                        fflush(stdin);
+                        scanf("%c",&contin);
+                    
+
+                    jug_act++;
+                    cartas_mano=2;
+                    suma=0;
+                break;
+            default:
+                break;
+         }
+         aux7=aux7->siguiente;
+     }
+
+    system("cls");
+    titulo();
+    printf("\n \n\n ");
+     printf(" Es turno del %s \n",aux7->nombre);
+     printf(" Su mano es\n");
+     cartas_mano=2;
+     suma=0;
+            for(int i=0;i<cartas_mano;i++){
+                suma=suma+aux7->lista_de_cartas[i]->valor;
+                printf(" %d%c",aux7->lista_de_cartas[i]->valor,aux7->lista_de_cartas[i]->palo);
+            }
+            if(suma>21){
+                aux7->estado=1;
+                printf("\n\n  Game Over!  ");
+            }else{
+                while(suma<=16){
+                    printf("\n\n");
+                    struct Pila* carta=pop(&Pila);  
+                    aux7->lista_de_cartas[cartas_mano]=carta->carta;
+                    cartas_mano++; 
+                    printf(" Su nueva mano es: \n",aux7->nombre);
+                    suma=0;
+                    for(int i=0;i<cartas_mano;i++){
+                        int valor=aux7->lista_de_cartas[i]->valor;
+                        if(valor>=10){
+                            valor=10;
+                        }
+                        suma=suma+valor;
+                        printf(" %d%c",aux7->lista_de_cartas[i]->valor,aux7->lista_de_cartas[i]->palo);
+                    }
+                    
+                }
+            }
+
 
 
 
     return 0;
 }
 
+
 Carta* Pilar(Carta *ArregloPila[]){
     Carta *aux;
     aux=(struct Carta*)malloc(sizeof(struct Carta));
     int random;
-    for(int j=0;j<rand()%4;j++){
+    for(int j=0;j<rand()%5;j++){
         for(int i = 0; i < 52; i++)
         {
             random = rand()%52;
