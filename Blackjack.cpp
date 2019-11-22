@@ -391,6 +391,7 @@ int main(){
                     }
                     
                 }
+                printf("\n\n");
             }
 
 
